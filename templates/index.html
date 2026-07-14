@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LogSense — Security Log Anomaly Explainer</title>
+<style>
+  body { background:#0f1117; color:#e6e6e6; font-family: 'Segoe UI', sans-serif; margin:0; padding:2rem; }
+  h1 { font-weight:600; }
+  .subtitle { color:#8b8fa3; margin-bottom:2rem; }
+  .upload-box { border:1px dashed #3a3f4b; padding:2rem; border-radius:10px; text-align:center; margin-bottom:2rem; }
+  button { background:#4f7cff; color:white; border:none; padding:0.6rem 1.2rem; border-radius:6px; cursor:pointer; font-size:0.95rem; }
+  button:hover { background:#3d63d6; }
+  .summary { display:flex; gap:1rem; margin-bottom:2rem; }
+  .card { background:#1a1d27; padding:1rem 1.5rem; border-radius:10px; flex:1; }
+  .card h3 { margin:0; font-size:1.8rem; }
+  .card p { margin:0.3rem 0 0; color:#8b8fa3; font-size:0.85rem; }
+  table { width:100%; border-collapse:collapse; font-family: monospace; font-size:0.9rem; }
+  th, td { text-align:left; padding:0.6rem; border-bottom:1px solid #262a35; }
+  tr.high { background:rgba(255,80,80,0.08); }
+  tr.medium { background:rgba(255,200,80,0.08); }
+  .badge { padding:2px 8px; border-radius:20px; font-size:0.75rem; }
+  .badge.high { background:#ff5050; color:white; }
+  .badge.medium { background:#ffb020; color:#1a1a1a; }
+  .explanation { display:none; padding:0.8rem; background:#161923; color:#c7cad1; font-family:sans-serif; font-size:0.85rem; }
+  tr.explain-row td { padding:0; }
+</style>
+</head>
+<body>
+  <h1>LogSense</h1>
+  <p class="subtitle">Upload authentication logs to detect and explain suspicious activity</p>
+
+  <div class="upload-box">
+    <input type="file" id="fileInput" accept=".csv" />
+    <br><br>
+    <button onclick="uploadFile()">Analyze Logs</button>
+  </div>
+
+  <div class="summary" id="summary" style="display:none;">
+    <div class="card"><h3 id="totalLogs">0</h3><p>Total Logs</p></div>
+    <div class="card"><h3 id="totalFlagged">0</h3><p>Flagged Incidents</p></div>
+  </div>
+
+  <table id="resultsTable" style="display:none;">
+    <thead>
+      <tr><th>Time</th><th>User</th><th>IP</th><th>Reason</th><th>Severity</th></tr>
+    </thead>
+    <tbody id="resultsBody"></tbody>
+  </table>
+
+<script>
+async function uploadFile() {
+  const fileInput = document.getElementById('fileInput');
+  if (!fileInput.files.length) { alert('Choose a CSV file first'); return; }
+
+  const formData = new FormData();
+  formData.append('file', fileInput.files[0]);
+
+  const res = await fetch('/upload', { method: 'POST', body: formData });
+  const data = await res.json();
+
+  document.getElementById('totalLogs').textContent = data.total_logs;
+  document.getElementById('totalFlagged').textContent = data.total_flagged;
+  document.getElementById('summary').style.display = 'flex';
+
+  const body = document.getElementById('resultsBody');
+  body.innerHTML = '';
+  data.flagged.forEach((f, i) => {
+    const row = document.createElement('tr');
+    row.className = f.severity;
+    row.style.cursor = 'pointer';
+    row.innerHTML = `<td>${f.timestamp}</td><td>${f.username}</td><td>${f.ip_address}</td><td>${f.reason}</td><td><span class="badge ${f.severity}">${f.severity}</span></td>`;
+    row.onclick = () => toggleExplanation(i);
+    body.appendChild(row);
+
+    const explainRow = document.createElement('tr');
+    explainRow.className = 'explain-row';
+    explainRow.innerHTML = `<td colspan="5"><div class="explanation" id="explain-${i}">${f.explanation}</div></td>`;
+    body.appendChild(explainRow);
+  });
+
+  document.getElementById('resultsTable').style.display = 'table';
+}
+
+function toggleExplanation(i) {
+  const el = document.getElementById('explain-' + i);
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+</script>
+</body>
+</html>
