@@ -31,7 +31,10 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-init_db()
+try:
+    init_db()
+except sqlite3.OperationalError:
+    pass
 
 
 # ---------- DETECTION RULES ----------
