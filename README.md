@@ -43,9 +43,12 @@ The model returns a plain-language explanation of why the pattern is suspicious,
 
 ## Screenshots
 
-![Dashboard with upload form](screenshots/dashboard.png)
-![Flagged incidents list with AI explanation expanded](screenshots/incident-list.png)
-![Third screenshot — add one more before submitting](screenshots/screenshot-3.png)
+![Dashboard with upload form](screenshots/dashboard.png)<img width="959" height="449" alt="dashboard" src="https://github.com/user-attachments/assets/cd87d3a7-5b6f-4929-95de-d7d06ed95a5a" />
+
+![Flagged incidents list with AI explanation expanded](screenshots/incident-list.png)<img width="959" height="539" alt="incident-list" src="https://github.com/user-attachments/assets/b9b8d690-3fe5-4050-8297-4d21c55a27e8" />
+
+![Third screenshot — add one more before submitting](screenshots/screenshot-3.png)<img width="944" height="445" alt="screenshot3" src="https://github.com/user-attachments/assets/2ea900e3-2e02-4c9c-a961-8b8eea082e13" />
+
 
 ## Setup — Run locally
 
