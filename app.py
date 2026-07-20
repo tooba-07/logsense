@@ -11,25 +11,27 @@ import csv
 import io
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, render_template
-import mysql.connector
+import sqlite3
 from groq import Groq
 
 app = Flask(__name__)
 
-# ---------- CONFIG ----------
-DB_CONFIG = {
-    "host": os.environ.get("DB_HOST", "localhost"),
-    "user": os.environ.get("DB_USER", "root"),
-    "password": os.environ.get("DB_PASSWORD", ""),
-    "database": os.environ.get("DB_NAME", "logsense"),
-}
+def init_db():
+    conn = get_db_connection()
+    with open(os.path.join(os.path.dirname(__file__), "schema.sql")) as f:
+        conn.executescript(f.read())
+    conn.commit()
+    conn.close()
 
 # Set your Groq API key as an environment variable: Groq_API_KEY
 groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY"))  # reads Groq_API_KEY from environment automatically
 
-
 def get_db_connection():
-    return mysql.connector.connect(**DB_CONFIG)
+    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), "logsense.db"))
+    conn.row_factory = sqlite3.Row
+    return conn
+
+init_db()
 
 
 # ---------- DETECTION RULES ----------
@@ -155,7 +157,7 @@ def upload_logs():
     log_ids = {}
     for log in logs:
         cursor.execute(
-            "INSERT INTO logs (username, ip_address, timestamp, event_type, attempt_count) VALUES (%s,%s,%s,%s,%s)",
+            "INSERT INTO logs (username, ip_address, timestamp, event_type, attempt_count) VALUES (?,?,?,?,?)",
             (log["username"], log["ip_address"], log["timestamp"], log["event_type"], log["attempt_count"])
         )
         log_ids[id(log)] = cursor.lastrowid
@@ -166,7 +168,7 @@ def upload_logs():
     for log, reason, severity in flags:
         explanation = get_ai_explanation(log, reason)
         cursor.execute(
-            "INSERT INTO flagged_incidents (log_id, reason, ai_explanation, severity) VALUES (%s,%s,%s,%s)",
+            "INSERT INTO flagged_incidents (log_id, reason, ai_explanation, severity) VALUES (?,?,?,?)",
             (log_ids[id(log)], reason, explanation, severity)
         )
         results.append({

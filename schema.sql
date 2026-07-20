@@ -1,22 +1,19 @@
-CREATE DATABASE logsense;
-USE logsense;
-
 CREATE TABLE logs (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(100),
-    ip_address VARCHAR(45),
-    timestamp DATETIME,
-    event_type VARCHAR(50),
-    attempt_count INT DEFAULT 1,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    ip_address TEXT,
+    timestamp TEXT,
+    event_type TEXT,
+    attempt_count INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE flagged_incidents (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    log_id INT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    log_id INTEGER,
     reason TEXT,
     ai_explanation TEXT,
-    severity VARCHAR(20),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    severity TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (log_id) REFERENCES logs(id)
 );
