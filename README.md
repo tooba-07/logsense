@@ -1,45 +1,40 @@
 # LogSense — Security Log Anomaly Explainer
 
-A tool that reads security login logs, automatically detects suspicious patterns using rules, then uses AI to explain why each one is suspicious — built with a real database behind it.
 
-**Developed by:** Tooba Asif
-**Program:** ACT AI National Initiative (in collaboration with AI SkillBridge, HEC, and NAVTTC)
-**Background:** Cyber Security student, Mehran University of Engineering & Technology (MUET), Jamshoro
+**Live Demo:** [https://itstooba07.pythonanywhere.com](https://itstooba07.pythonanywhere.com)  
+**GitHub Repo:** [https://github.com/tooba-07/logsense](https://github.com/tooba-07/logsense)  
 
-## Live Demo
-https://itstooba07.pythonanywhere.com
+## 📖 What is LogSense?
+LogSense is a complete, end-to-end web application designed for cybersecurity students and beginner SOC analysts. 
 
-## What it does
+**The problem:** Raw security logs are filled with cryptic timestamps and IP addresses, making them difficult for beginners to interpret.  
+**The solution:** LogSense combines rule-based detection with AI-generated explanations. Students can upload authentication logs, instantly see which events are suspicious, and receive plain-language explanations of *why* each event is a threat. 
 
-- Detects brute-force login attempts, odd-hour logins, and impossible travel patterns
-- Uses Groq's Llama 3.3 model to generate plain-language explanations for each flagged incident
-- Stores logs and flagged incidents in a SQLite database
-- Displays results on a clean dashboard with severity ratings (high/medium)
+## 🎯 Target Audience
+This tool is built specifically for **cybersecurity students at MUET** and entry-level analysts who are learning to identify brute-force attacks, impossible travel patterns, and off-hours login anomalies in a real-world environment.
 
-## Why this project
+## ✨ What it does
+- **Rule-Based Detection:** Automatically detects brute-force login attempts (7+ failed logins in 10 minutes), odd-hour logins (outside business hours), and impossible travel patterns.
+- **AI-Powered Explanations:** Uses Groq's Llama 3.3 model to translate flagged events into simple, easy-to-understand sentences.
+- **Data Persistence:** Stores logs and flagged incidents in a local SQLite database.
+- **Interactive Dashboard:** Displays flagged incidents in a clean, dark-themed table with severity ratings (High/Medium) and expandable AI explanations.
+- **Seamless Upload:** Users can upload their CSV log files directly via a simple web interface.
 
-Reading raw security logs is hard for beginners in cybersecurity. LogSense bridges that gap by combining rule-based detection with AI-generated explanations, making log analysis approachable for students and SOC analysts alike.
+## 🤖 The AI Feature
+When a log entry is flagged by the rule-based engine, LogSense sends the data to the **Groq API** using the `llama-3.3-70b-versatile` model.
 
-## The AI feature
+**The system prompt used to generate explanations:**
+> *"You are a SOC analyst assistant helping a cybersecurity student. In 2-3 simple sentences, explain why Log: username={username}, ip={ip_address}, time={timestamp}, event={event_type} Flag reason: {reason}"*
 
-When a log entry is flagged by the rule-based detection (brute-force, odd-hour login, or impossible travel), LogSense sends the flagged entry to Groq's Llama 3.3 model (`llama-3.3-70b-versatile`) with the following prompt:
+The model returns a natural-language explanation, which is stored in the database and displayed alongside the incident on the dashboard.
 
-```
-You are a SOC analyst assistant helping a cybersecurity student. In 2-3 simple sentences, explain why the following log entry is suspicious and what this type of activity typically indicates in a real environment.
+## 🛠️ Tech Stack
+- **Backend:** Python, Flask
+- **Database:** SQLite
+- **AI Model:** Groq API (Llama 3.3)
+- **Frontend:** HTML, CSS, JavaScript
+- **Hosting:** PythonAnywhere
 
-Log: username={username}, ip={ip_address}, time={timestamp}, event={event_type}
-Flag reason: {reason}
-```
-
-The model returns a plain-language explanation of why the pattern is suspicious, which is stored alongside the incident and displayed on the dashboard.
-
-## Tech Stack
-
-- Backend: Python, Flask
-- Database: SQLite
-- AI: Groq API (Llama 3.3)
-- Frontend: HTML/CSS/JS
-- Hosting: PythonAnywhere
 
 ## Screenshots
 
@@ -74,3 +69,17 @@ The model returns a plain-language explanation of why the pattern is suspicious,
    ```
 
 5. Open `http://127.0.0.1:5000` in your browser. The SQLite database (`logsense.db`) is created automatically on first run.
+
+
+## 📝 License & Status
+
+**Status:** Fully functional, deployed, and ready for evaluation.
+
+**License:** This project is developed as an individual final assignment for the ACT AI National Initiative program (MUET, Jamshoro). Open-source for academic review only. Not permitted for commercial redistribution without author consent.
+
+**Submission:** Submitted to QuizyHub (MUET) for the Final Project — Ship Your AI App.
+
+**Attribution:**
+- **Developer:** Tooba Asif
+- **Institution:** Mehran University of Engineering & Technology (MUET), Jamshoro
+- **Program:** ACT AI National Initiative (AI SkillBridge, HEC, and NAVTTC)
