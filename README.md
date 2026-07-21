@@ -11,7 +11,7 @@ LogSense is a complete, end-to-end web application designed for cybersecurity st
 **The solution:** LogSense combines rule-based detection with AI-generated explanations. Students can upload authentication logs, instantly see which events are suspicious, and receive plain-language explanations of *why* each event is a threat. 
 
 ## 🎯 Target Audience
-This tool is built specifically for **cybersecurity students at MUET** and entry-level analysts who are learning to identify brute-force attacks, impossible travel patterns, and off-hours login anomalies in a real-world environment.
+This tool is built specifically for **cybersecurity students** and entry-level analysts who are learning to identify brute-force attacks, impossible travel patterns, and off-hours login anomalies in a real-world environment.
 
 ## ✨ What it does
 - **Rule-Based Detection:** Automatically detects brute-force login attempts (7+ failed logins in 10 minutes), odd-hour logins (outside business hours), and impossible travel patterns.
@@ -42,7 +42,7 @@ The model returns a natural-language explanation, which is stored in the databas
 
 ![Flagged incidents list with AI explanation expanded](screenshots/incident-list.png)<img width="959" height="539" alt="incident-list" src="https://github.com/user-attachments/assets/b9b8d690-3fe5-4050-8297-4d21c55a27e8" />
 
-![Third screenshot](screenshots/screenshot-3.png)<img width="944" height="445" alt="screenshot3" src="https://github.com/user-attachments/assets/2ea900e3-2e02-4c9c-a961-8b8eea082e13" />
+![AI explanation view](screenshots/screenshot-3.png)<img width="944" height="445" alt="screenshot3" src="https://github.com/user-attachments/assets/2ea900e3-2e02-4c9c-a961-8b8eea082e13" />
 
 
 ## Setup — Run locally
